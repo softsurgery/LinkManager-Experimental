@@ -1,0 +1,3 @@
+scripts/private/tsc.js linguist-vendored
+scripts/build.js linguist-vendored
+scripts/dev-server.js linguist-vendored
