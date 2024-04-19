@@ -12,7 +12,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import AddReactionIcon from '@mui/icons-material/AddReaction';
 
 import { Navbar } from "../Common/Navbar";
-import { AddDialog } from "./AddDialog";
+import { AddFolderDialog } from "./AddFolderDialog";
 import { Folder } from "./Folder";
 import categoryModel from "../../model/Categories";
 
@@ -37,10 +37,6 @@ export const FolderDrawer = observer(({ style }) => {
     { icon: <FileUploadIcon />, name: "Export To JSON/CSV", callback: handleOpen }
   ];
 
-  const handleClick = (id) => {
-    setClickedId(id);
-  };
-
   const search = categoryModel.categories.map((category) => ({
     title: category.title,
   }));
@@ -64,7 +60,9 @@ export const FolderDrawer = observer(({ style }) => {
               name={category.title}
               color={category.color}
               clicked={clickedId === category.id}
-              handleClick={handleClick}
+              handleClick={(id) => {
+                setClickedId(id);
+              }}
             />
           );
         })}
@@ -80,7 +78,7 @@ export const FolderDrawer = observer(({ style }) => {
             />
           ))}
         </SpeedDial>
-        <AddDialog open={open} handleClose={handleClose} />
+        <AddFolderDialog open={open} handleClose={handleClose} />
       </Box>
     </Stack>
   );

@@ -2,6 +2,8 @@ import PropTypes from "prop-types";
 import { openExternally } from "../../../electron";
 
 export const LinkItem = ({ name, url }) => {
+
+  
   return (
     <div>
       <a

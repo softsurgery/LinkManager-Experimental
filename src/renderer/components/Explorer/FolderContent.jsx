@@ -1,16 +1,17 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import React from "react";
 import { Navbar } from "../Common/Navbar";
 import { LinkItem } from "./Link/LinkItem";
 import styled from "styled-components";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { observer } from "mobx-react";
 import categoryModel from "../../model/Categories";
 import linkModel from "../../model/Links";
+import { IconButton } from "@mui/material";
 
 const FolderTitle = styled.h1`
   font-size: 3rem;
-  text-align: center;
   text-decoration: underline;
 `;
 
@@ -20,6 +21,7 @@ const Content = styled.h2`
 
 export const FolderContent = observer(() => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     categoryModel.getCategory(id);
@@ -28,7 +30,21 @@ export const FolderContent = observer(() => {
 
   return (
     <div>
-      <Navbar isRoot={false} />
+      <Navbar
+        isRoot={false}
+        content={
+          <IconButton 
+            aria-label="delete" 
+            style={{ color: "white" }} 
+            onClick={() => {
+              categoryModel.deleteCategory(id);
+              categoryModel.fetchCategories();
+              navigate("/");
+            }}>
+            <DeleteIcon />
+          </IconButton>
+        }
+      />
       <div style={{ margin: "1rem" }}>
         {categoryModel.selectedCategory ? (
           <FolderTitle style={{ color: categoryModel.selectedCategory.color }}>

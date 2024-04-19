@@ -1,5 +1,5 @@
 import { makeAutoObservable, action, observable } from 'mobx';
-import { getAllCategories,createCategory,getCategory } from "../electron";
+import { getAllCategories,createCategory,getCategory,deleteCategory } from "../electron";
 
 class CategoryModel {
     categories = [];
@@ -11,6 +11,7 @@ class CategoryModel {
             fetchCategories: action,
             createCategory: action,
             getCategory: action,
+            deleteCategory: action,
         });
     }
 
@@ -27,6 +28,11 @@ class CategoryModel {
     async getCategory(id) {
         const res = await getCategory(id);
         this.selectedCategory = res;
+    }
+
+    async deleteCategory(id) {
+        await deleteCategory(id);
+        this.categories = this.categories.filter((category) => category.id!== id);
     }
 }
 
