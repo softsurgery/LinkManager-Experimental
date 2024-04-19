@@ -1,13 +1,20 @@
 import { useState } from "react";
 import { styled } from "styled-components";
-import { Folder } from "./Folder";
+import { observer } from "mobx-react";
 import PropTypes from "prop-types";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
-import Stack from "@mui/material/Stack";
+
+import { Autocomplete, Box, TextField, Stack } from "@mui/material";
+import { SpeedDial, SpeedDialAction } from "@mui/material";
+
+import AddIcon from "@mui/icons-material/Add";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import AddReactionIcon from '@mui/icons-material/AddReaction';
+
 import { Navbar } from "../Common/Navbar";
-
-
+import { AddDialog } from "./AddDialog";
+import { Folder } from "./Folder";
+import categoryModel from "../../model/Categories";
 
 const Explorer = styled.div`
   display: grid;
@@ -17,14 +24,24 @@ const Explorer = styled.div`
   height: fit-content;
 `;
 
-export const FolderDrawer = ({ style, categories }) => {
+export const FolderDrawer = observer(({ style }) => {
   const [clickedId, setClickedId] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const actions = [
+    { icon: <AddIcon />, name: "Add Category", callback: handleOpen },
+    { icon: <FileDownloadIcon />, name: "Import From JSON/CSV", callback: handleOpen },
+    { icon: <FileUploadIcon />, name: "Export To JSON/CSV", callback: handleOpen }
+  ];
 
   const handleClick = (id) => {
     setClickedId(id);
   };
 
-  const search = categories.map((category) => ({
+  const search = categoryModel.categories.map((category) => ({
     title: category.title,
   }));
 
@@ -39,7 +56,7 @@ export const FolderDrawer = ({ style, categories }) => {
         style={{ margin: "20px" }}
       />
       <Explorer>
-        {categories.map((category) => {
+        {categoryModel.categories.map((category) => {
           return (
             <Folder
               key={category.id}
@@ -52,17 +69,23 @@ export const FolderDrawer = ({ style, categories }) => {
           );
         })}
       </Explorer>
+      <Box sx={{ position: "fixed", bottom: 16, right: 16 }}>
+        <SpeedDial ariaLabel="SpeedDial" icon={<AddReactionIcon />}>
+          {actions.map((action) => (
+            <SpeedDialAction
+              key={action.name}
+              icon={action.icon}
+              tooltipTitle={action.name}
+              onClick={action.callback}
+            />
+          ))}
+        </SpeedDial>
+        <AddDialog open={open} handleClose={handleClose} />
+      </Box>
     </Stack>
   );
-};
+});
 
 FolderDrawer.propTypes = {
   style: PropTypes.object,
-  categories: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      color: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
 };

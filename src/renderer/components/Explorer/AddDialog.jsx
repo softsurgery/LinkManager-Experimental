@@ -3,8 +3,9 @@ import { Box,Modal } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { TwitterPicker } from 'react-color';
-import { createCategory } from "../electron";
 import PropTypes from "prop-types";
+import { observer } from "mobx-react";
+import categoryModel from "../../model/Categories";
 
 const style = {
   position: 'absolute',
@@ -19,7 +20,7 @@ const style = {
   p: 4,
 };
 
-export const AddDialog = ({ open, handleClose, refresh }) => {
+export const AddDialog = observer(({ open, handleClose}) => {
   const [folderTitle, setFolderTitle] = useState("Folder");
   const [folderColor, setFolderColor] = useState("#000");
 
@@ -29,11 +30,11 @@ export const AddDialog = ({ open, handleClose, refresh }) => {
 
   const handleSubmit = () => {
     if (folderTitle) {
-      createCategory({ title: folderTitle, color: folderColor });
+      categoryModel.createCategory({ title: folderTitle, color: folderColor });
       handleClose();
       setFolderTitle("");
       setFolderColor("#000");
-      refresh();
+      categoryModel.fetchCategories();
     }
   };
 
@@ -72,10 +73,9 @@ export const AddDialog = ({ open, handleClose, refresh }) => {
       </Modal>
     </div>
   );
-}
+})
 
 AddDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  refresh: PropTypes.func.isRequired,
 };

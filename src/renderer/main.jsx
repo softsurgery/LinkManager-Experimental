@@ -1,9 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
+import { configure } from "mobx"
 import { Inspector } from "react-dev-inspector";
 const InspectorWrapper = import.meta.env.DEV ? Inspector : React.Fragment;
+
+
+import App from "./App.jsx";
 import "./index.css";
+
 
 console.log("import.meta: ", import.meta.env);
 
@@ -18,3 +22,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </InspectorWrapper>
   </React.StrictMode>,
 );
+
+
+
+configure({
+    enforceActions: "never",
+})

@@ -12,16 +12,17 @@ export const Folder = ({ style, id, name, color, clicked, handleClick }) => {
         ...style,
         textAlign: "center",
         cursor: "pointer",
-        margin: "10px",
+        margin: "0.5rem",
         backgroundColor: clicked ? "lightblue" : "transparent",
       }}
       onClick={() => handleClick(id)}
-      onDoubleClick={() => navigate("/category/" + id)}
+      onDoubleClick={() => navigate(`/category/${id}`)}
     >
       <FolderIcon
         sx={{
           fontSize: 100,
           color: color,
+          marginBottom: "-1rem",
         }}
       />
       <Typography style={{ fontWeight: "800", color: color }}>
