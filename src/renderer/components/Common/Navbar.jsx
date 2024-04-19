@@ -2,7 +2,7 @@ import { AppBar, Box, Toolbar, Typography, IconButton } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import PropTypes from "prop-types";
 
-export const Navbar = ({ isRoot }) => {
+export const Navbar = ({ isRoot, content }) => {
   const handleGoBack = () => {
     window.history.back();
   };
@@ -28,6 +28,7 @@ export const Navbar = ({ isRoot }) => {
           >
             Link Manager
           </Typography>
+          {content}
         </Toolbar>
       </AppBar>
     </Box>
@@ -36,4 +37,5 @@ export const Navbar = ({ isRoot }) => {
 
 Navbar.propTypes = {
   isRoot: PropTypes.bool.isRequired,
+  content: PropTypes.node,
 };

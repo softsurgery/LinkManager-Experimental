@@ -45,13 +45,10 @@
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
-    "@quasar/extras": "^1.15.5",
     "ahooks": "^3.7.8",
-    "antd": "^5.10.0",
-    "classnames": "^2.3.2",
     "electron-updater": "^5.3.0",
-    "leaflet": "^1.9.4",
-    "quasar": "^2.10.1",
+    "mobx": "^6.12.3",
+    "mobx-react": "^9.1.1",
     "react": "^18.2.0",
     "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
@@ -59,7 +56,6 @@
     "react-router-dom": "^6.22.3",
     "sequelize": "^6.25.5",
     "sqlite3": "^5.1.2",
-    "styled-components": "^6.1.8",
-    "three": "^0.136.0"
+    "styled-components": "^6.1.8"
   }
 }

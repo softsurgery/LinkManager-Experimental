@@ -1,14 +1,17 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import React from "react";
 import { Navbar } from "../Common/Navbar";
 import { LinkItem } from "./Link/LinkItem";
-import { getLinksByCategoryId, getCategory } from "../../electron";
 import styled from "styled-components";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { observer } from "mobx-react";
+import categoryModel from "../../model/Categories";
+import linkModel from "../../model/Links";
+import { IconButton } from "@mui/material";
 
 const FolderTitle = styled.h1`
   font-size: 3rem;
-  text-align: center;
   text-decoration: underline;
 `;
 
@@ -16,40 +19,42 @@ const Content = styled.h2`
   font-size: 1.5rem;
 `;
 
-export const FolderContent = () => {
+export const FolderContent = observer(() => {
   const { id } = useParams();
-  const [list, setList] = React.useState([]);
-  const [category, setCategory] = React.useState({});
-
-  const fetchCategory = () => {
-    getCategory(id).then((res) => {
-      console.log("res: ", res);
-      setCategory(res);
-    });
-  };
-
-  const fetchLinks = () => {
-    getLinksByCategoryId(id).then((res) => {
-      console.log("res: ", res);
-      setList(res);
-    });
-  };
+  const navigate = useNavigate();
 
   React.useEffect(() => {
-    fetchCategory();
-    fetchLinks();
-  }, []);
+    categoryModel.getCategory(id);
+    linkModel.fetchLinksByCategoryId(id);
+  }, [id]);
 
   return (
     <div>
-      <Navbar isRoot={false} />
+      <Navbar
+        isRoot={false}
+        content={
+          <IconButton 
+            aria-label="delete" 
+            style={{ color: "white" }} 
+            onClick={() => {
+              categoryModel.deleteCategory(id);
+              categoryModel.fetchCategories();
+              navigate("/");
+            }}>
+            <DeleteIcon />
+          </IconButton>
+        }
+      />
       <div style={{ margin: "1rem" }}>
-        <FolderTitle style={{ color: category.color }}>{category.title}</FolderTitle>
-
-        {list.length > 0? (
+        {categoryModel.selectedCategory ? (
+          <FolderTitle style={{ color: categoryModel.selectedCategory.color }}>
+            {categoryModel.selectedCategory.title}
+          </FolderTitle>
+        ) : null}
+        {linkModel.links.length > 0 ? (
           <div>
             <Content>Content :</Content>
-            {list.map((link) => (
+            {linkModel.links.map((link) => (
               <div key={link.id} style={{ display: "flex", alignItems: "center" }}>
                 <InsertLinkIcon style={{ marginRight: "1rem" }} />
                 <LinkItem key={link.id} name={link.title} url={link.url} />
@@ -62,5 +67,4 @@ export const FolderContent = () => {
       </div>
     </div>
   );
-};
-
+});
